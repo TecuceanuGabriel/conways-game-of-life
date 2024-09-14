@@ -1,24 +1,26 @@
 #include "BoardData.hpp"
 
-BoardData::BoardData() : height(0), width(0) {}
+BoardData::BoardData() {}
 
-void BoardData::set_cell(int x, int y, CellState cs)
+void BoardData::resize(int width, int height)
 {
-	if (x > height) {
-		cells.resize(x);
-		height = x;
-	}
-
-	if (y > width) {
-		for (auto &row : cells)
-			row.resize(y);
-		width = y;
-	}
-
-	cells[x][y] = cs;
+	cells.resize(height);
+	for (auto &row : cells)
+		row.resize(width);
 }
 
+BoardData::BoardData(int width, int height) : width(width), height(height)
+{
+	resize(width, height);
+}
+
+void BoardData::set_cell(int x, int y, CellState cs) { cells[x][y] = cs; }
+
 CellState BoardData::get_cell(int x, int y) { return cells[x][y]; }
+
+int BoardData::get_width() { return width; }
+
+int BoardData::get_height() { return height; }
 
 int BoardData::count_neighbours(int x, int y)
 {
@@ -41,13 +43,8 @@ int BoardData::count_neighbours(int x, int y)
 
 void BoardData::next_generation()
 {
-	std::vector<std::vector<CellState>> new_state;
-	new_state.resize(height);
-	for (auto &row : cells)
-		row.resize(width);
-
 	for (int x = 0; x < height; ++x)
-		for (int y = 0; y < height; ++y) {
+		for (int y = 0; y < width; ++y) {
 			int neighbour_count = count_neighbours(x, y);
 
 			if (cells[x][y] == CellState::ALIVE &&

@@ -1,10 +1,7 @@
 #include "Game.hpp"
 
-Game::Game() : mWindow(sf::VideoMode(640, 480), "Conway's game"), mPlayer()
+Game::Game() : mWindow(sf::VideoMode(640, 480), "Conway's game"), grid()
 {
-	mPlayer.setRadius(40.f);
-	mPlayer.setPosition(100.f, 100.f);
-	mPlayer.setFillColor(sf::Color::Cyan);
 }
 
 void Game::run()
@@ -30,6 +27,6 @@ void Game::update() {}
 void Game::render()
 {
 	mWindow.clear();
-	mWindow.draw(mPlayer);
+    grid.draw(mWindow); 
 	mWindow.display();
 }

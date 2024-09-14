@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Grid.hpp"
+
 class Game
 {
   public:
@@ -15,5 +17,6 @@ class Game
 
   private:
 	sf::RenderWindow mWindow;
-	sf::CircleShape mPlayer;
+
+    Grid grid;
 };
