@@ -4,6 +4,12 @@
 
 #include "Grid.hpp"
 
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
+
+#define MIN_ZOOM 0.2
+#define MAX_ZOOM 2.0
+
 class Game
 {
   public:
@@ -16,7 +22,9 @@ class Game
 	void render();
 
   private:
-	sf::RenderWindow mWindow;
+	sf::RenderWindow window;
+	sf::View view;
 
-    Grid grid;
+	Grid grid;
+	float current_zoom;
 };

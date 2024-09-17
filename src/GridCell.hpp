@@ -12,7 +12,8 @@ class GridCell
 	void set_position(int x, int y);
     void draw(sf::RenderWindow &window);
 
-    bool is_hovered(sf::Vector2i mouse_position);
+    bool is_hovered(sf::Vector2f mouse_position);
+    bool is_visible(sf::RenderWindow &window);
 
   private:
     int x;
