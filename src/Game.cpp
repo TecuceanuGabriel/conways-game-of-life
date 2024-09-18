@@ -54,6 +54,11 @@ void Game::processEvents()
 				}
 			}
 		}
+		if (event.type == sf::Event::MouseButtonPressed) {
+			if (event.mouseButton.button == sf::Mouse::Left) {
+                grid.handle_click(window);
+            }
+		}
 	}
 }
 

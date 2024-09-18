@@ -14,7 +14,7 @@ class Grid
 
 	void draw(sf::RenderWindow &window);
 
-	void handle_click();
+	void handle_click(sf::RenderWindow &window);
 
   private:
 	void init_positions();

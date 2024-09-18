@@ -1,6 +1,6 @@
 #include "GridCell.hpp"
 
-GridCell::GridCell() : shape()
+GridCell::GridCell() : shape(), status(DEAD)
 {
 	shape.setSize(sf::Vector2f(CELL_SIZE, CELL_SIZE));
 	shape.setFillColor(sf::Color::Black);
@@ -23,19 +23,21 @@ void GridCell::draw(sf::RenderWindow &window)
 		window.mapPixelToCoords(mouse_window_pos, window.getView());
 
 	if (is_hovered(mouse_view_pos))
-		shape.setFillColor(sf::Color::White);
+		shape.setFillColor(
+			(status == ALIVE ? sf::Color::Blue : sf::Color::White));
 	else
-		shape.setFillColor(sf::Color::Black);
+		shape.setFillColor(
+			(status == ALIVE ? sf::Color::White : sf::Color::Black));
 
 	window.draw(shape);
 }
 
 bool GridCell::is_hovered(sf::Vector2f mouse_position)
 {
-	return x * CELL_SIZE <= mouse_position.x &&
-		   mouse_position.x <= (x + 1) * CELL_SIZE &&
-		   y * CELL_SIZE <= mouse_position.y &&
-		   mouse_position.y <= (y + 1) * CELL_SIZE;
+	return x * CELL_SIZE <= (int)mouse_position.x &&
+		   (int)mouse_position.x <= (x + 1) * CELL_SIZE &&
+		   y * CELL_SIZE <= (int)mouse_position.y &&
+		   (int)mouse_position.y <= (y + 1) * CELL_SIZE;
 }
 
 bool GridCell::is_visible(sf::RenderWindow &window)
@@ -50,4 +52,12 @@ bool GridCell::is_visible(sf::RenderWindow &window)
 	view_bounds.height = view.getSize().y;
 
 	return object_bounds.intersects(view_bounds);
+}
+
+void GridCell::handle_click()
+{
+	if (status == DEAD)
+		status = ALIVE;
+	else
+		status = DEAD;
 }
