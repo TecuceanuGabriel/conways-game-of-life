@@ -1,6 +1,6 @@
 #include "GridCell.hpp"
 
-GridCell::GridCell() : shape(), status(DEAD)
+GridCell::GridCell() : shape()
 {
 	shape.setSize(sf::Vector2f(CELL_SIZE, CELL_SIZE));
 	shape.setFillColor(sf::Color::Black);
@@ -16,7 +16,7 @@ void GridCell::set_position(int x, int y)
 	shape.setPosition(x * CELL_SIZE, y * CELL_SIZE);
 }
 
-void GridCell::draw(sf::RenderWindow &window)
+void GridCell::draw(sf::RenderWindow &window, CellState status)
 {
 	sf::Vector2i mouse_window_pos = sf::Mouse::getPosition(window);
 	sf::Vector2f mouse_view_pos =
@@ -52,12 +52,4 @@ bool GridCell::is_visible(sf::RenderWindow &window)
 	view_bounds.height = view.getSize().y;
 
 	return object_bounds.intersects(view_bounds);
-}
-
-void GridCell::handle_click()
-{
-	if (status == DEAD)
-		status = ALIVE;
-	else
-		status = DEAD;
 }

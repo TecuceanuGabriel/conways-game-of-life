@@ -27,4 +27,8 @@ class Game
 
 	Grid grid;
 	float current_zoom;
+
+    sf::Clock clock;
+
+    constexpr static const float SCROLL_SPEED = 500.0f;
 };

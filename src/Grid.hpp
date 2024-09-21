@@ -13,6 +13,7 @@ class Grid
 	Grid(BoardData board_data);
 
 	void draw(sf::RenderWindow &window);
+    void update();
 
 	void handle_click(sf::RenderWindow &window);
 

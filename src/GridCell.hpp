@@ -11,7 +11,7 @@ class GridCell
 	GridCell();
 
 	void set_position(int x, int y);
-	void draw(sf::RenderWindow &window);
+	void draw(sf::RenderWindow &window, CellState status);
 
 	bool is_hovered(sf::Vector2f mouse_position);
 	bool is_visible(sf::RenderWindow &window);
@@ -21,8 +21,6 @@ class GridCell
   private:
 	int x;
 	int y;
-
-    CellState status;
 
 	sf::RectangleShape shape;
 };

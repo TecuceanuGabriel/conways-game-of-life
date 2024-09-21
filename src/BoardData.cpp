@@ -34,7 +34,7 @@ int BoardData::count_neighbours(int x, int y)
 			int new_x = x + i;
 			int new_y = y + j;
 
-			if (0 <= new_x && new_x <= height && 0 <= new_y && new_y <= width)
+			if (0 <= new_x && new_x < height && 0 <= new_y && new_y < width)
 				count += cells[new_x][new_y];
 		}
 
@@ -43,14 +43,18 @@ int BoardData::count_neighbours(int x, int y)
 
 void BoardData::next_generation()
 {
+	std::vector<std::vector<CellState>> next_cells = cells;
+
 	for (int x = 0; x < height; ++x)
 		for (int y = 0; y < width; ++y) {
 			int neighbour_count = count_neighbours(x, y);
 
 			if (cells[x][y] == CellState::ALIVE &&
 				(neighbour_count < 2 || neighbour_count >= 4))
-				set_cell(x, y, CellState::DEAD);
+				next_cells[x][y] = CellState::DEAD;
 			else if (cells[x][y] == CellState::DEAD && neighbour_count == 3)
-				set_cell(x, y, CellState::ALIVE);
+				next_cells[x][y] = CellState::ALIVE;
 		}
+
+	cells = next_cells;
 }

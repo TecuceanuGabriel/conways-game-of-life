@@ -30,6 +30,9 @@ void Game::run()
 
 void Game::processEvents()
 {
+	float delta_time = clock.restart().asSeconds();
+	sf::Vector2f distance(0, 0);
+
 	sf::Event event;
 	while (window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
@@ -56,10 +59,25 @@ void Game::processEvents()
 		}
 		if (event.type == sf::Event::MouseButtonPressed) {
 			if (event.mouseButton.button == sf::Mouse::Left) {
-                grid.handle_click(window);
-            }
+				grid.handle_click(window);
+			}
+		}
+		if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == sf::Keyboard::Enter) {
+				grid.update();
+			} else if (event.key.code == sf::Keyboard::Left) {
+				distance.x += -SCROLL_SPEED * delta_time;
+			} else if (event.key.code == sf::Keyboard::Right) {
+                distance.x += SCROLL_SPEED * delta_time;
+			} else if (event.key.code == sf::Keyboard::Up) {
+                distance.y += -SCROLL_SPEED * delta_time;
+			} else if (event.key.code == sf::Keyboard::Down) {
+                distance.y += SCROLL_SPEED * delta_time;
+			}
 		}
 	}
+
+	view.move(distance);
 }
 
 void Game::update() {}

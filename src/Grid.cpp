@@ -1,6 +1,5 @@
 #include "Grid.hpp"
 
-#include <iostream>
 #include <math.h>
 
 void Grid::init_positions()
@@ -32,45 +31,46 @@ static sf::Vector2i getFirstVisibleCell(const sf::RenderWindow &window)
 {
 	sf::View view = window.getView();
 
-	sf::FloatRect viewBounds;
-	viewBounds.left = view.getCenter().x - view.getSize().x / 2;
-	viewBounds.top = view.getCenter().y - view.getSize().y / 2;
-	viewBounds.width = view.getSize().x;
-	viewBounds.height = view.getSize().y;
+	sf::FloatRect view_bounds;
+	view_bounds.left = view.getCenter().x - view.getSize().x / 2;
+	view_bounds.top = view.getCenter().y - view.getSize().y / 2;
+	view_bounds.width = view.getSize().x;
+	view_bounds.height = view.getSize().y;
 
-	int firstVisibleCol = std::floor(viewBounds.left / CELL_SIZE);
-	int firstVisibleRow = std::floor(viewBounds.top / CELL_SIZE);
+	int bottom_corner_col = std::floor(view_bounds.left / CELL_SIZE);
+	int bottom_corner_row = std::floor(view_bounds.top / CELL_SIZE);
 
 	sf::Vector2u window_size = window.getSize();
 
-	firstVisibleCol = std::max(0, std::min(firstVisibleCol, DEFAULT_WIDTH - 1));
-	firstVisibleRow =
-		std::max(0, std::min(firstVisibleRow, DEFAULT_HEIGHT - 1));
+	bottom_corner_col =
+		std::max(0, std::min(bottom_corner_col, DEFAULT_WIDTH - 1));
+	bottom_corner_row =
+		std::max(0, std::min(bottom_corner_row, DEFAULT_HEIGHT - 1));
 
-	return sf::Vector2i(firstVisibleCol, firstVisibleRow);
+	return sf::Vector2i(bottom_corner_col, bottom_corner_row);
 }
 
 static sf::Vector2i getLastVisibleCell(const sf::RenderWindow &window)
 {
 	sf::View view = window.getView();
 
-	sf::FloatRect viewBounds;
-	viewBounds.left = view.getCenter().x - view.getSize().x / 2;
-	viewBounds.top = view.getCenter().y - view.getSize().y / 2;
-	viewBounds.width = view.getSize().x;
-	viewBounds.height = view.getSize().y;
+	sf::FloatRect view_bounds;
+	view_bounds.left = view.getCenter().x - view.getSize().x / 2;
+	view_bounds.top = view.getCenter().y - view.getSize().y / 2;
+	view_bounds.width = view.getSize().x;
+	view_bounds.height = view.getSize().y;
 
-	int lastVisibleCol =
-		std::floor((viewBounds.left + viewBounds.width) / CELL_SIZE);
-	int lastVisibleRow =
-		std::floor((viewBounds.top + viewBounds.height) / CELL_SIZE);
+	int top_corner_col =
+		std::floor((view_bounds.left + view_bounds.width) / CELL_SIZE);
+	int top_corner_row =
+		std::floor((view_bounds.top + view_bounds.height) / CELL_SIZE);
 
 	sf::Vector2u window_size = window.getSize();
 
-	lastVisibleCol = std::max(0, std::min(lastVisibleCol, DEFAULT_WIDTH - 1));
-	lastVisibleRow = std::max(0, std::min(lastVisibleRow, DEFAULT_HEIGHT - 1));
+	top_corner_col = std::max(0, std::min(top_corner_col, DEFAULT_WIDTH - 1));
+	top_corner_row = std::max(0, std::min(top_corner_row, DEFAULT_HEIGHT - 1));
 
-	return sf::Vector2i(lastVisibleCol, lastVisibleRow);
+	return sf::Vector2i(top_corner_col, top_corner_row);
 }
 
 void Grid::draw(sf::RenderWindow &window)
@@ -78,12 +78,9 @@ void Grid::draw(sf::RenderWindow &window)
 	sf::Vector2i top_left_cell = getFirstVisibleCell(window);
 	sf::Vector2i bottom_right_cell = getLastVisibleCell(window);
 
-	/* std::cout << top_left_cell.x << " " << top_left_cell.y << " " */
-	/* 		  << bottom_right_cell.x << " " << bottom_right_cell.y << '\n'; */
-
 	for (int row = top_left_cell.x; row <= bottom_right_cell.x; ++row) {
 		for (int col = top_left_cell.y; col <= bottom_right_cell.y; ++col) {
-			cells[row][col].draw(window);
+			cells[row][col].draw(window, board_data.get_cell(row, col));
 		}
 	}
 }
@@ -103,11 +100,10 @@ void Grid::handle_click(sf::RenderWindow &window)
 	if (row >= DEFAULT_HEIGHT || col >= DEFAULT_WIDTH)
 		return;
 
-	/* std::cout << row << " " << col << '\n'; */
-
-	cells[row][col].handle_click();
 	board_data.set_cell(
 		row,
 		col,
 		(board_data.get_cell(row, col) == ALIVE ? DEAD : ALIVE));
 }
+
+void Grid::update() { board_data.next_generation(); }
